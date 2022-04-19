@@ -42,9 +42,8 @@ class SbappApplicationTests {
 		Assertions.assertEquals("ПРИВЕТ МИР!", res);
 	}
 	@Test
-	void testLow(){
-		final String res = speakerService.sayLow("Мир","ru");
+	void testLow() {
+		final String res = speakerService.sayLow("Мир", "ru");
 		Assertions.assertEquals("привет мир!", res);
 	}
-
 }
