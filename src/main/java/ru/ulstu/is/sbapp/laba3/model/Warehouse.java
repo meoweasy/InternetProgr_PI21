@@ -1,28 +1,42 @@
 package ru.ulstu.is.sbapp.laba3.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Objects;
 @Entity
 public class Warehouse {
     @Id
-    private int id;
-    private int MaterialId;
-    private int TypeWarehouseId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    @Column()
+    private Long MaterialId;
+    private Long TypeWarehouseId;
 
     public Warehouse() {
     }
 
-    public Warehouse(int id,int MaterialId,int TypeWarehouseId) {
-        this.id=id;
+    public Warehouse(Long MaterialId,Long TypeWarehouseId) {
         this.MaterialId=MaterialId;
         this.TypeWarehouseId=TypeWarehouseId;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
+    public Long getMaterialId() {
+        return MaterialId;
+    }
 
+    public void setMaterialId(Long MaterialId) {
+        this.MaterialId = MaterialId;
+    }
+
+    public Long getTypeWarehouseId() {
+        return TypeWarehouseId;
+    }
+
+    public void setTypeWarehouseId(Long TypeWarehouseId) {
+        this.TypeWarehouseId = TypeWarehouseId;
+    }
 
     @Override
     public boolean equals(Object o) {

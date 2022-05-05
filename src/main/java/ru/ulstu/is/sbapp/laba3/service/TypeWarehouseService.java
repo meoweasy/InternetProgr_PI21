@@ -16,17 +16,17 @@ public class TypeWarehouseService {
     private EntityManager em;
 
     @Transactional
-    public TypeWarehouse addTypeWarehouse(int id, String name) {
+    public TypeWarehouse addTypeWarehouse(String name) {
         if (!StringUtils.hasText(name)) {
             throw new IllegalArgumentException("TypeWarehouse name is null or empty");
         }
-        final TypeWarehouse typeWarehouse = new TypeWarehouse(id, name);
+        final TypeWarehouse typeWarehouse = new TypeWarehouse(name);
         em.persist(typeWarehouse);
         return typeWarehouse;
     }
 
     @Transactional(readOnly = true)
-    public TypeWarehouse findTypeWarehouse(int id) {
+    public TypeWarehouse findTypeWarehouse(Long id) {
         final TypeWarehouse typeWarehouse = em.find(TypeWarehouse.class, id);
         if (typeWarehouse == null) {
             throw new EntityNotFoundException(String.format("typeWarehouse with id [%s] is not found", id));
@@ -41,7 +41,7 @@ public class TypeWarehouseService {
     }
 
     @Transactional
-    public TypeWarehouse updateTypeWarehouse(int id, String name) {
+    public TypeWarehouse updateTypeWarehouse(Long id, String name) {
         if (!StringUtils.hasText(name)) {
             throw new IllegalArgumentException("TypeWarehouse name is null or empty");
         }
@@ -51,7 +51,7 @@ public class TypeWarehouseService {
     }
 
     @Transactional
-    public TypeWarehouse deleteTypeWarehouse(int id) {
+    public TypeWarehouse deleteTypeWarehouse(Long id) {
         final TypeWarehouse currentTypeWarehouse = findTypeWarehouse(id);
         em.remove(currentTypeWarehouse);
         return currentTypeWarehouse;
