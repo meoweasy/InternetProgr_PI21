@@ -15,14 +15,17 @@ public class WarehouseService {
     private EntityManager em;
 
     @Transactional
-    public Warehouse addWarehouse(int id,int MaterialId,int TypeWarehouseId) {
-        final Warehouse warehouse = new Warehouse(id,MaterialId,TypeWarehouseId);
+    public Warehouse addWarehouse(Long MaterialId,Long TypeWarehouseId) {
+        if (!(MaterialId != null) || !(TypeWarehouseId != null)){
+            throw new IllegalArgumentException("Id's is null or empty");
+        }
+        final Warehouse warehouse = new Warehouse(MaterialId,TypeWarehouseId);
         em.persist(warehouse);
         return warehouse;
     }
 
     @Transactional(readOnly = true)
-    public Warehouse findWarehouse(int id) {
+    public Warehouse findWarehouse(Long id) {
         final Warehouse warehouse = em.find(Warehouse.class, id);
         if (warehouse == null) {
             throw new EntityNotFoundException(String.format("Warehouse with id [%s] is not found", id));
@@ -37,15 +40,24 @@ public class WarehouseService {
 
 
     @Transactional
-    public Warehouse updateWarehouse(int id) {
+    public Warehouse updateWarehouse(Long id, Long MaterialId, Long TypeWarehouseId) {
+        if (!(MaterialId == null) || !(TypeWarehouseId == null)){
+            throw  new IllegalArgumentException("Warehouse Id's is null or empty");
+        }
         final Warehouse currentWarehouse = findWarehouse(id);
+        currentWarehouse.setMaterialId(MaterialId);
+        currentWarehouse.setTypeWarehouseId(TypeWarehouseId);
         return em.merge(currentWarehouse);
     }
 
     @Transactional
-    public Warehouse deleteWarehouse(int id) {
+    public Warehouse deleteWarehouse(Long id) {
         final Warehouse currentWarehouse = findWarehouse(id);
         em.remove(currentWarehouse);
         return currentWarehouse;
+    }
+    @Transactional
+    public void deleteAllWarehouses() {
+        em.createQuery("delete from Warehouse").executeUpdate();
     }
 }

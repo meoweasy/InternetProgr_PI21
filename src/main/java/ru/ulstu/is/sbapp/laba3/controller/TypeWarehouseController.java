@@ -17,7 +17,7 @@ public class TypeWarehouseController {
     }
 
     @GetMapping("/{id}")
-    public TypeWarehouse getTypeWarehouse(@PathVariable int id) {
+    public TypeWarehouse getTypeWarehouse(@PathVariable Long id) {
         return typeWarehouseService.findTypeWarehouse(id);
     }
 
@@ -27,19 +27,18 @@ public class TypeWarehouseController {
     }
 
     @PostMapping("/")
-    public TypeWarehouse createTypeWarehouse(@RequestParam("id") int id,
-                                   @RequestParam("name") String name) {
-        return typeWarehouseService.addTypeWarehouse(id, name);
+    public TypeWarehouse createTypeWarehouse(@RequestParam("name") String name) {
+        return typeWarehouseService.addTypeWarehouse(name);
     }
 
     @PatchMapping("/{id}")
-    public TypeWarehouse updateTypeWarehouse(@PathVariable int id,
+    public TypeWarehouse updateTypeWarehouse(@PathVariable Long id,
                                    @RequestParam("name") String name) {
         return typeWarehouseService.updateTypeWarehouse(id, name);
     }
 
     @DeleteMapping("/{id}")
-    public TypeWarehouse deleteTypeWarehouse(@PathVariable int id) {
+    public TypeWarehouse deleteTypeWarehouse(@PathVariable Long id) {
         return typeWarehouseService.deleteTypeWarehouse(id);
     }
 }

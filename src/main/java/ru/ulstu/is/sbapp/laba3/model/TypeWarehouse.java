@@ -6,17 +6,18 @@ import java.util.Objects;
 @Entity
 public class TypeWarehouse {
     @Id
-    private int id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    @Column()
     private String name;
 
     public TypeWarehouse(){
     }
 
-    public TypeWarehouse(int id,String name) {
-        this.id = id;
+    public TypeWarehouse(String name) {
         this.name=name;
     }
-    public int getId() {
+    public Long getId() {
         return id;
     }
     public void setName(String Name) {

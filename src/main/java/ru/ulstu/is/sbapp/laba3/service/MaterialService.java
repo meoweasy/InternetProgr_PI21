@@ -15,17 +15,17 @@ public class MaterialService {
     private EntityManager em;
 
     @Transactional
-    public Material addMaterial(int id, String name) {
+    public Material addMaterial(String name) {
         if (!StringUtils.hasText(name)) {
             throw new IllegalArgumentException("Material name is null or empty");
         }
-        final Material material = new Material(id, name);
+        final Material material = new Material(name);
         em.persist(material);
         return material;
     }
 
     @Transactional(readOnly = true)
-    public Material findMaterial(int id) {
+    public Material findMaterial(Long id) {
         final Material material = em.find(Material.class, id);
         if (material == null) {
             throw new EntityNotFoundException(String.format("Material with id [%s] is not found", id));
@@ -40,7 +40,7 @@ public class MaterialService {
     }
 
     @Transactional
-    public Material updateMaterial(int id, String name) {
+    public Material updateMaterial(Long id, String name) {
         if (!StringUtils.hasText(name)) {
             throw new IllegalArgumentException("Material name is null or empty");
         }
@@ -50,7 +50,7 @@ public class MaterialService {
     }
 
     @Transactional
-    public Material deleteMaterial(int id) {
+    public Material deleteMaterial(Long id) {
         final Material currentMaterial = findMaterial(id);
         em.remove(currentMaterial);
         return currentMaterial;

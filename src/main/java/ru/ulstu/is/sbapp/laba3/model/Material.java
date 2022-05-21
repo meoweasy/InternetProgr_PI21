@@ -1,27 +1,27 @@
 package ru.ulstu.is.sbapp.laba3.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
 public class Material {
     @Id
-    private int id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    @Column()
     private String name;
 
     public Material() {
     }
 
-    public Material(int id,String name) {
-        this.id=id;
+    public Material(String name) {
         this.name=name;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
-    public void setName(String Name) {
+    public void setName(String name) {
         this.name = name;
     }
 

@@ -17,7 +17,7 @@ public class MaterialController {
     }
 
     @GetMapping("/{id}")
-    public Material getMaterial(@PathVariable int id) {
+    public Material getMaterial(@PathVariable Long id) {
         return materialService.findMaterial(id);
     }
 
@@ -27,19 +27,18 @@ public class MaterialController {
     }
 
     @PostMapping("/")
-    public Material createMaterial(@RequestParam("id") int id,
-                                 @RequestParam("name") String name) {
-        return materialService.addMaterial(id, name);
+    public Material createMaterial(@RequestParam("name") String name) {
+        return materialService.addMaterial(name);
     }
 
     @PatchMapping("/{id}")
-    public Material updateMaterial(@PathVariable int id,
+    public Material updateMaterial(@PathVariable Long id,
                                  @RequestParam("name") String name) {
         return materialService.updateMaterial(id, name);
     }
 
     @DeleteMapping("/{id}")
-    public Material deleteMaterial(@PathVariable int id) {
+    public Material deleteMaterial(@PathVariable Long id) {
         return materialService.deleteMaterial(id);
     }
 }

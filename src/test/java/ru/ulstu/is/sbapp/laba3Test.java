@@ -26,23 +26,32 @@ public class laba3Test {
     @Test
     void Add(){
         materialService.deleteAllMaterials();
-        typeWarehouseService.deleteAllTypeWarehouses();
-        final Material m1 = materialService.addMaterial(1,"доска");
-        log.info(m1.toString());
-        final Material m2 = materialService.addMaterial(2,"винт");
-        log.info(m2.toString());
-        final Material m3 = materialService.addMaterial(3,"стол");
-        log.info(m3.toString());
-        final TypeWarehouse tw1 = typeWarehouseService.addTypeWarehouse(1,"склад готовой продукции");
-        log.info(tw1.toString());
-        final TypeWarehouse tw2 = typeWarehouseService.addTypeWarehouse(2,"склад материалов");
-        log.info(tw2.toString());
-        final Warehouse w1 = warehouseService.addWarehouse(1,m1.getId(), tw2.getId());
-        log.info(w1.toString());
-        final Warehouse w2 = warehouseService.addWarehouse(2,m2.getId(), tw2.getId());
-        log.info(w2.toString());
-        final Warehouse w3 = warehouseService.addWarehouse(3,m3.getId(), tw1.getId());
-        log.info(w3.toString());
-    }
 
+        final Material m1 = materialService.addMaterial("Доска");
+        log.info(m1.toString());
+        final Material m2 = materialService.addMaterial("Клей");
+        log.info(m2.toString());
+        final Material m3 = materialService.addMaterial("Лак");
+        log.info(m3.toString());
+        final Material m4 = materialService.addMaterial("Шуруп");
+        log.info(m4.toString());
+
+        typeWarehouseService.deleteAllTypeWarehouses();
+
+        final TypeWarehouse t1 = typeWarehouseService.addTypeWarehouse("Склад 1");
+        log.info(t1.toString());
+        final TypeWarehouse t2 = typeWarehouseService.addTypeWarehouse("Склад 2");
+        log.info(t2.toString());
+
+        warehouseService.deleteAllWarehouses();
+
+        final Warehouse w1 = warehouseService.addWarehouse(m1.getId(), t1.getId());
+        log.info(w1.toString());
+        final Warehouse w2 = warehouseService.addWarehouse(m2.getId(), t1.getId());
+        log.info(w2.toString());
+        final Warehouse w3 = warehouseService.addWarehouse(m3.getId(), t2.getId());
+        log.info(w3.toString());
+        final Warehouse w4 = warehouseService.addWarehouse(m4.getId(), t2.getId());
+        log.info(w4.toString());
+    }
 }
