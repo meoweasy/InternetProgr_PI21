@@ -2,63 +2,58 @@ package ru.ulstu.is.sbapp.laba3.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 import ru.ulstu.is.sbapp.laba3.model.TypeWarehouse;
+import ru.ulstu.is.sbapp.laba3.repository.ITypeWarehouseRepository;
+import ru.ulstu.is.sbapp.util.validation.ValidatorUtil;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.PersistenceContext;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TypeWarehouseService {
-    @PersistenceContext
-    private EntityManager em;
+    private final ITypeWarehouseRepository typeWarehouseRepository;
+    private final ValidatorUtil validatorUtil;
+
+    public TypeWarehouseService(ITypeWarehouseRepository typeWarehouseRepository,ValidatorUtil validatorUtil){
+        this.typeWarehouseRepository = typeWarehouseRepository;
+        this.validatorUtil = validatorUtil;
+    }
 
     @Transactional
     public TypeWarehouse addTypeWarehouse(String name) {
-        if (!StringUtils.hasText(name)) {
-            throw new IllegalArgumentException("TypeWarehouse name is null or empty");
-        }
-        final TypeWarehouse typeWarehouse = new TypeWarehouse(name);
-        em.persist(typeWarehouse);
-        return typeWarehouse;
+        final TypeWarehouse tw = new TypeWarehouse(name);
+        validatorUtil.validate(tw);
+        return typeWarehouseRepository.save(tw);
     }
 
     @Transactional(readOnly = true)
     public TypeWarehouse findTypeWarehouse(Long id) {
-        final TypeWarehouse typeWarehouse = em.find(TypeWarehouse.class, id);
-        if (typeWarehouse == null) {
-            throw new EntityNotFoundException(String.format("typeWarehouse with id [%s] is not found", id));
-        }
-        return typeWarehouse;
+        final Optional<TypeWarehouse> tw = typeWarehouseRepository.findById(id);
+        return tw.orElseThrow(() -> new TypeWarehouseNotFoundException(id));
     }
 
     @Transactional(readOnly = true)
     public List<TypeWarehouse> findAllTypeWarehouses() {
-        return em.createQuery("select s from TypeWarehouse s", TypeWarehouse.class)
-                .getResultList();
+        return typeWarehouseRepository.findAll();
     }
 
     @Transactional
     public TypeWarehouse updateTypeWarehouse(Long id, String name) {
-        if (!StringUtils.hasText(name)) {
-            throw new IllegalArgumentException("TypeWarehouse name is null or empty");
-        }
         final TypeWarehouse currentTypeWarehouse = findTypeWarehouse(id);
         currentTypeWarehouse.setName(name);
-        return em.merge(currentTypeWarehouse);
+        validatorUtil.validate(currentTypeWarehouse);
+        return typeWarehouseRepository.save(currentTypeWarehouse);
     }
 
     @Transactional
     public TypeWarehouse deleteTypeWarehouse(Long id) {
         final TypeWarehouse currentTypeWarehouse = findTypeWarehouse(id);
-        em.remove(currentTypeWarehouse);
+        typeWarehouseRepository.delete(currentTypeWarehouse);
         return currentTypeWarehouse;
     }
 
     @Transactional
     public void deleteAllTypeWarehouses() {
-        em.createQuery("delete from TypeWarehouse").executeUpdate();
+        typeWarehouseRepository.deleteAll();
     }
 }

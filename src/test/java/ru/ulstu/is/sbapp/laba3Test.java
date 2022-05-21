@@ -27,20 +27,20 @@ public class laba3Test {
     void Add(){
         materialService.deleteAllMaterials();
 
-        final Material m1 = materialService.addMaterial("Доска");
+        final Material m1 = materialService.addMaterial("Стол");
         log.info(m1.toString());
-        final Material m2 = materialService.addMaterial("Клей");
+        final Material m2 = materialService.addMaterial("Шкаф");
         log.info(m2.toString());
-        final Material m3 = materialService.addMaterial("Лак");
+        final Material m3 = materialService.addMaterial("Доска");
         log.info(m3.toString());
-        final Material m4 = materialService.addMaterial("Шуруп");
+        final Material m4 = materialService.addMaterial("Клей");
         log.info(m4.toString());
 
         typeWarehouseService.deleteAllTypeWarehouses();
 
-        final TypeWarehouse t1 = typeWarehouseService.addTypeWarehouse("Склад 1");
+        final TypeWarehouse t1 = typeWarehouseService.addTypeWarehouse("Склад готовых изделий");
         log.info(t1.toString());
-        final TypeWarehouse t2 = typeWarehouseService.addTypeWarehouse("Склад 2");
+        final TypeWarehouse t2 = typeWarehouseService.addTypeWarehouse("Склад материалов");
         log.info(t2.toString());
 
         warehouseService.deleteAllWarehouses();

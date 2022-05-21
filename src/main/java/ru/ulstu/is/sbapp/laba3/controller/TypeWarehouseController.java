@@ -1,13 +1,14 @@
 package ru.ulstu.is.sbapp.laba3.controller;
 
 import org.springframework.web.bind.annotation.*;
-import ru.ulstu.is.sbapp.laba3.model.TypeWarehouse;
+import ru.ulstu.is.sbapp.WebConfiguration;
 import ru.ulstu.is.sbapp.laba3.service.TypeWarehouseService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/typewarehouse")
+@RequestMapping(WebConfiguration.REST_API + "/typeWarehouse")
 public class TypeWarehouseController {
     private final TypeWarehouseService typeWarehouseService;
 
@@ -17,28 +18,28 @@ public class TypeWarehouseController {
     }
 
     @GetMapping("/{id}")
-    public TypeWarehouse getTypeWarehouse(@PathVariable Long id) {
-        return typeWarehouseService.findTypeWarehouse(id);
+    public TypeWarehouseDto getTypeWarehouse(@PathVariable Long id) {
+        return new TypeWarehouseDto(typeWarehouseService.findTypeWarehouse(id));
     }
 
     @GetMapping("/")
-    public List<TypeWarehouse> geTypeWarehouses() {
-        return typeWarehouseService.findAllTypeWarehouses();
+    public List<TypeWarehouseDto> getTypeWarehouses() {
+        return typeWarehouseService.findAllTypeWarehouses().stream().map(TypeWarehouseDto::new).collect(Collectors.toList());
     }
 
     @PostMapping("/")
-    public TypeWarehouse createTypeWarehouse(@RequestParam("name") String name) {
-        return typeWarehouseService.addTypeWarehouse(name);
+    public TypeWarehouseDto createTypeWarehouse(@RequestParam("name") String name) {
+        return new TypeWarehouseDto(typeWarehouseService.addTypeWarehouse(name));
     }
 
-    @PatchMapping("/{id}")
-    public TypeWarehouse updateTypeWarehouse(@PathVariable Long id,
-                                   @RequestParam("name") String name) {
-        return typeWarehouseService.updateTypeWarehouse(id, name);
+    @PutMapping("/{id}")
+    public TypeWarehouseDto updateTypeWarehouse(@PathVariable Long id,
+                                                @RequestParam("name") String name) {
+        return new TypeWarehouseDto(typeWarehouseService.updateTypeWarehouse(id, name));
     }
 
     @DeleteMapping("/{id}")
-    public TypeWarehouse deleteTypeWarehouse(@PathVariable Long id) {
-        return typeWarehouseService.deleteTypeWarehouse(id);
+    public TypeWarehouseDto deleteTypeWarehouse(@PathVariable Long id) {
+        return new TypeWarehouseDto(typeWarehouseService.deleteTypeWarehouse(id));
     }
 }

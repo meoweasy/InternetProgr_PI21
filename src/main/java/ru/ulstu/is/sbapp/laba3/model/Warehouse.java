@@ -27,7 +27,7 @@ public class Warehouse {
     }
 
     public void setMaterialId(Long MaterialId) {
-        this.MaterialId = MaterialId;
+        this.MaterialId=MaterialId;
     }
 
     public Long getTypeWarehouseId() {

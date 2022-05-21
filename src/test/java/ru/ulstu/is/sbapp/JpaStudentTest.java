@@ -7,9 +7,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.ulstu.is.sbapp.student.model.Student;
+import ru.ulstu.is.sbapp.student.service.StudentNotFoundException;
 import ru.ulstu.is.sbapp.student.service.StudentService;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @SpringBootTest
@@ -36,14 +36,14 @@ public class JpaStudentTest {
         log.info(student.toString());
         final Student findStudent = studentService.findStudent(student.getId());
         log.info(findStudent.toString());
-        Assertions.assertEquals(student, findStudent,"Строки не равны");
+        Assertions.assertEquals(student, findStudent);
     }
 
     //Выведет исключение, если код НЕ вызовет исключение типа ApplicationException
     @Test
     void testStudentReadNotFound() {
         studentService.deleteAllStudents();
-        Assertions.assertThrows(EntityNotFoundException.class, () -> studentService.findStudent(-1L));
+        Assertions.assertThrows(StudentNotFoundException.class, () -> studentService.findStudent(-1L));
     }
 
     //Выведет исключение, если в списке студентов будет больше студентов, чем 2

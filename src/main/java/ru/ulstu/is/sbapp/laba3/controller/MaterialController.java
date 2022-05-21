@@ -1,13 +1,15 @@
 package ru.ulstu.is.sbapp.laba3.controller;
 
 import org.springframework.web.bind.annotation.*;
-import ru.ulstu.is.sbapp.laba3.model.Material;
+import ru.ulstu.is.sbapp.WebConfiguration;
 import ru.ulstu.is.sbapp.laba3.service.MaterialService;
 
+import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/material")
+@RequestMapping(WebConfiguration.REST_API+"/material")
 public class MaterialController {
     private final MaterialService materialService;
 
@@ -17,28 +19,28 @@ public class MaterialController {
     }
 
     @GetMapping("/{id}")
-    public Material getMaterial(@PathVariable Long id) {
-        return materialService.findMaterial(id);
+    public MaterialDto getMaterial(@PathVariable Long id) {
+        return new MaterialDto(materialService.findMaterial(id));
     }
 
     @GetMapping("/")
-    public List<Material> geMaterials() {
-        return materialService.findAllMaterials();
+    public List<MaterialDto> geMaterials() {
+        return materialService.findAllMaterials().stream().map(MaterialDto::new).collect(Collectors.toList());
     }
 
     @PostMapping("/")
-    public Material createMaterial(@RequestParam("name") String name) {
-        return materialService.addMaterial(name);
+    public MaterialDto createMaterial(@RequestBody @Valid MaterialDto materialDto) {
+        return new MaterialDto(materialService.addMaterial(materialDto.getName()));
     }
 
-    @PatchMapping("/{id}")
-    public Material updateMaterial(@PathVariable Long id,
-                                 @RequestParam("name") String name) {
-        return materialService.updateMaterial(id, name);
+    @PutMapping("/{id}")
+    public MaterialDto updateMaterial(@PathVariable Long id,
+                                      @RequestBody @Valid MaterialDto materialDto) {
+        return new MaterialDto(materialService.updateMaterial(id, materialDto.getName()));
     }
 
     @DeleteMapping("/{id}")
-    public Material deleteMaterial(@PathVariable Long id) {
-        return materialService.deleteMaterial(id);
+    public MaterialDto deleteMaterial(@PathVariable Long id) {
+        return new MaterialDto(materialService.deleteMaterial(id));
     }
 }
