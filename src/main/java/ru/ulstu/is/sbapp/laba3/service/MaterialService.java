@@ -1,64 +1,59 @@
 package ru.ulstu.is.sbapp.laba3.service;
 
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
-import ru.ulstu.is.sbapp.laba3.model.Material;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import ru.ulstu.is.sbapp.laba3.model.Material;
+import ru.ulstu.is.sbapp.laba3.repository.IMaterialRepository;
+import ru.ulstu.is.sbapp.util.validation.ValidatorUtil;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.PersistenceContext;
 import java.util.List;
+import java.util.Optional;
+
 @Service
 public class MaterialService {
-    @PersistenceContext
-    private EntityManager em;
+    private final IMaterialRepository materialRepository;
+    private  final ValidatorUtil validatorUtil;
+    public MaterialService(IMaterialRepository materialRepository,ValidatorUtil validatorUtil){
+        this.materialRepository = materialRepository;
+        this.validatorUtil = validatorUtil;
+    }
 
     @Transactional
     public Material addMaterial(String name) {
-        if (!StringUtils.hasText(name)) {
-            throw new IllegalArgumentException("Material name is null or empty");
-        }
-        final Material material = new Material(name);
-        em.persist(material);
-        return material;
+        final Material mat = new Material(name);
+        validatorUtil.validate(mat);
+        return materialRepository.save(mat);
     }
 
     @Transactional(readOnly = true)
     public Material findMaterial(Long id) {
-        final Material material = em.find(Material.class, id);
-        if (material == null) {
-            throw new EntityNotFoundException(String.format("Material with id [%s] is not found", id));
-        }
-        return material;
+        final Optional<Material> mat = materialRepository.findById(id);
+        return mat.orElseThrow(() -> new MaterialNotFoundException(id));
     }
 
     @Transactional(readOnly = true)
     public List<Material> findAllMaterials() {
-        return em.createQuery("select s from Material s", Material.class)
-                .getResultList();
+        return materialRepository.findAll();
     }
 
     @Transactional
     public Material updateMaterial(Long id, String name) {
-        if (!StringUtils.hasText(name)) {
-            throw new IllegalArgumentException("Material name is null or empty");
-        }
         final Material currentMaterial = findMaterial(id);
         currentMaterial.setName(name);
-        return em.merge(currentMaterial);
+        validatorUtil.validate(currentMaterial);
+        return materialRepository.save(currentMaterial);
     }
 
     @Transactional
     public Material deleteMaterial(Long id) {
         final Material currentMaterial = findMaterial(id);
-        em.remove(currentMaterial);
+        materialRepository.delete(currentMaterial);
         return currentMaterial;
     }
 
     @Transactional
     public void deleteAllMaterials() {
-        em.createQuery("delete from Material").executeUpdate();
+        materialRepository.deleteAll();
     }
 }
 

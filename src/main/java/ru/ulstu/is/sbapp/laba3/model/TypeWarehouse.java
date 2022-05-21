@@ -20,8 +20,11 @@ public class TypeWarehouse {
     public Long getId() {
         return id;
     }
-    public void setName(String Name) {
+    public void setName(String name) {
         this.name = name;
+    }
+    public String getName() {
+        return name;
     }
     @Override
     public boolean equals(Object o) {

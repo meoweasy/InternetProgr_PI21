@@ -1,20 +1,14 @@
 package ru.ulstu.is.sbapp.student.controller;
 
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import ru.ulstu.is.sbapp.student.model.Student;
+import org.springframework.web.bind.annotation.*;
+import ru.ulstu.is.sbapp.WebConfiguration;
 import ru.ulstu.is.sbapp.student.service.StudentService;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/student")
+@RequestMapping(WebConfiguration.REST_API + "/student")
 public class StudentController {
     private final StudentService studentService;
 
@@ -24,30 +18,28 @@ public class StudentController {
     }
 
     @GetMapping("/{id}")
-    public Student getStudent(@PathVariable Long id) {
-        return studentService.findStudent(id);
+    public StudentDto getStudent(@PathVariable Long id) {
+        return new StudentDto(studentService.findStudent(id));
     }
 
     @GetMapping("/")
-    public List<Student> getStudents() {
-        return studentService.findAllStudents();
+    public List<StudentDto> getStudents() {
+        return studentService.findAllStudents().stream().map(StudentDto::new).toList();
     }
 
-    @PostMapping("/")
-    public Student createStudent(@RequestParam("firstName") String firstName,
-                                 @RequestParam("lastName") String lastName) {
-        return studentService.addStudent(firstName, lastName);
+    @PostMapping
+    public StudentDto createStudent(@RequestBody @Valid StudentDto studentDto) {
+        return new StudentDto(studentService.addStudent(studentDto.getFirstName(), studentDto.getLastName()));
     }
 
-    @PatchMapping("/{id}")
-    public Student updateStudent(@PathVariable Long id,
-                                 @RequestParam("firstName") String firstName,
-                                 @RequestParam("lastName") String lastName) {
-        return studentService.updateStudent(id, firstName, lastName);
+    @PutMapping("/{id}")
+    public StudentDto updateStudent(@PathVariable Long id,
+                                    @RequestBody @Valid StudentDto studentDto) {
+        return new StudentDto(studentService.updateStudent(id, studentDto.getFirstName(), studentDto.getLastName()));
     }
 
     @DeleteMapping("/{id}")
-    public Student deleteStudent(@PathVariable Long id) {
-        return studentService.deleteStudent(id);
+    public StudentDto deleteStudent(@PathVariable Long id) {
+        return new StudentDto(studentService.deleteStudent(id));
     }
 }
